@@ -14,9 +14,12 @@ trait PrepareUse
         } else {
             $stmts = &$this->ast;
         }
-        foreach ($stmts as $k => $stmt) {
-            if (get_class($stmt) == 'PhpParser\Node\Stmt\Use_') {
-                unset($stmts[$k]);
+
+        if (is_array($stmts)) {
+            foreach ($stmts as $k => $stmt) {
+                if (get_class($stmt) == 'PhpParser\Node\Stmt\Use_') {
+                    unset($stmts[$k]);
+                }
             }
         }
 

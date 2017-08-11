@@ -76,7 +76,7 @@ trait ClassParser
     private function parseClass($node)
     {
         $this->extends = $node->extends;
-        $this->className = $node->name;
+        $this->name = $node->name;
         $this->implements = $node->implements;
         $this->astlink['class'] = $node;
 

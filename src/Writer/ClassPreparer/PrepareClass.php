@@ -12,21 +12,27 @@ trait PrepareClass
 {
     private function prepareClass()
     {
+        $stmts = null;
         if (isset($this->astlink['namespace'])) {
             $stmts = &$this->astlink['namespace']->stmts;
-        } else {
+        }
+
+        if ($stmts == null) {
             $stmts = &$this->ast;
         }
 
         $class = null;
-        foreach ($stmts as $stmt) {
-            if (get_class($stmt) == 'PhpParser\Node\Stmt\Class_') {
-                $class = &$stmt;
+        if (is_array($stmts)) {
+            foreach ($stmts as $stmt) {
+                if (get_class($stmt) == 'PhpParser\Node\Stmt\Class_') {
+                    $class = &$stmt;
+                }
             }
         }
 
         if (is_null($class)) return;
 
+        $class->name = $this->name;
         $this->astlink['class'] = $class;
 
         $this->prepareProperties($class);
@@ -34,7 +40,8 @@ trait PrepareClass
         $this->prepareMethods($class);
     }
 
-    private function prepareMethods($class) {
+    private function prepareMethods($class)
+    {
         $stmts = $class->stmts;
         foreach ($stmts as $k => $stmt) {
             if (get_class($stmt) == 'PhpParser\Node\Stmt\ClassMethod') {
@@ -108,7 +115,8 @@ trait PrepareClass
         }
     }
 
-    private function prepareTraits(&$class) {
+    private function prepareTraits(&$class)
+    {
         $stmts = $class->stmts;
         foreach ($stmts as $k => $stmt) {
             if (get_class($stmt) == 'PhpParser\Node\Stmt\TraitUse') {
@@ -173,7 +181,7 @@ trait PrepareClass
                 $default = null;
             }
 
-            array_unshift($stmts, new Property($flags,[
+            array_unshift($stmts, new Property($flags, [
                 new PropertyProperty($k, $default)
             ]));
         }

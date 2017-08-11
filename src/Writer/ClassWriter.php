@@ -15,7 +15,6 @@ trait ClassWriter
         $this->prepareClass();
 
         $code = self::printCode($this->ast);
-        echo($code);
-//        file_put_contents($this->filename, $code);
+        file_put_contents($this->filename, $code);
     }
 }

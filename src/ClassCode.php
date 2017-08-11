@@ -12,7 +12,7 @@ class ClassCode
     use Writer\ClassWriter;
 
     public $filename = '';
-    public $className = '';
+    public $name = '';
     public $extends = '';
     public $namespace = '';
     public $implements = [];
@@ -24,11 +24,13 @@ class ClassCode
     public function __construct($filename)
     {
         if (!is_file($filename)) {
-            throw new \Exception("File $filename does not exists");
+            $class = str_replace(".php", "", basename($filename));
+            file_put_contents($filename, " <?php \n class {$class} {} ");
         }
         if (!is_writable($filename)) {
             throw new \Exception("File $filename is not writtable");
         }
+
         $this->filename = realpath($filename);
 
         $code = file_get_contents($this->filename);
