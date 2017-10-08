@@ -170,9 +170,7 @@ trait ClassParser
 
         if (!$phpTag) {
             $code = $codePrinter->prettyPrintFile($ast);
-            $code = str_replace('<?php
-
-', '', $code);
+            $code = trim(str_replace('<?php', '', $code));
 
             return $code;
         } else {
